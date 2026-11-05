@@ -6,6 +6,9 @@ Ce document prépare le PoC. Les états « proposé », « à vérifier » et
 Références de travail : sujet « Plan_Module_Réseaux_Modernes_NetOps »,
 diapositives 5 et 6, supports Introduction MPLS L3VPN et Introduction NetOps,
 et architecture corrigée communiquée par l'utilisateur.
+Les informations d'infrastructure proviennent aussi des sorties `ip a`
+de toolsG2 et labG2 fournies par l'utilisateur. Leur analyse détaillée figure
+dans [Environnement des deux VM](environnement-vm.md).
 
 ## 1. Analyse du besoin
 
@@ -28,6 +31,8 @@ Chaque filiale doit relier ses deux agences. Les deux intranets doivent rester
 - eBGP entre les PE et les CE.
 - Deux VRF clientes, avec des conventions RD et RT explicites.
 - Docker, Containerlab et cEOS pour le laboratoire fourni.
+- Deux VM disponibles : toolsG2 en 10.108.2.29/24 et labG2 en 10.108.2.65/24.
+- Adresses VM dynamiques et accès inter-VM/management à vérifier.
 - Ansible et Jinja2 via eAPI HTTPS/443 pour le provisionnement futur.
 - Checkup ponctuel et chaîne d'observabilité gNMI, gnmic, Prometheus et Grafana.
 - Versionnement Git et démonstration orale.
@@ -112,9 +117,27 @@ La double connexion protège contre la perte d'un lien de transport. P1 reste
 l'unique RR, et chaque site garde un seul CE et un seul PE d'accès.
 L'isolation des VRF ne chiffre pas les communications.
 
+### Répartition proposée sur les VM
+
+| VM | Adresse observée sur ens18 | Rôle proposé |
+|---|---|---|
+| toolsG2 | 10.108.2.29/24 | Git, contrôleur Ansible, gnmic, Prometheus et Grafana |
+| labG2 | 10.108.2.65/24 | Docker, Containerlab, neuf cEOS et quatre hosts Linux |
+
+Ces rôles restent à confirmer par les contrôles d'environnement.
+Les VM appartiennent au même sous-réseau IPv4 d'infrastructure. Leurs IP ne
+remplacent ni les adresses LAN clientes ni les loopbacks ni les adresses de
+management des équipements du PoC.
+
+Le chemin de gestion proposé relie toolsG2 aux conteneurs de labG2 via
+172.31.255.0/24. Un accès routé via 10.108.2.65 nécessitera de vérifier le
+routage, le transfert sur labG2, le filtrage Docker et le chemin retour.
+Aucune de ces fonctions n'est déduite comme opérationnelle des sorties `ip a`.
+
 ## 3. Plan d'adressage proposé
 
-Toutes les valeurs de cette section restent à valider sur le laboratoire.
+Les adresses des VM sont observées dans les sorties fournies. Toutes les
+adresses des équipements et liens du PoC restent proposées et à valider.
 Le détail des interfaces et des adresses figure dans `data/fabric.yml`.
 
 ### LAN des sites
@@ -167,9 +190,19 @@ destinées à être annoncées dans l'OSPF du réseau opérateur.
 | PE-BDX / P2 | 10.0.0.21/30 | 10.0.0.22/30 |
 | P1 / P2 | 10.0.0.25/30 | 10.0.0.26/30 |
 
-Les /30 privilégient la lisibilité pédagogique. Le management utilise un
-réseau distinct proposé, 172.31.255.0/24, à vérifier pour éviter tout conflit
-avec le réseau de la machine hébergeant le laboratoire.
+Les /30 privilégient la lisibilité pédagogique. Le management des futurs
+conteneurs utilise le réseau proposé 172.31.255.0/24 sur labG2, avec une
+passerelle de bridge proposée 172.31.255.1.
+
+Les deux VM présentent déjà 172.17.0.0/16 sur docker0 et 172.18.0.0/16 sur
+un autre bridge. Le plan proposé ne chevauche ni ces réseaux, ni le réseau
+d'infrastructure 10.108.2.0/24. Les routes et réseaux non montrés restent à
+contrôler. Les bridges 172.18.0.0/16 des deux VM sont des réseaux locaux
+distincts : leur adresse identique ne crée pas un réseau partagé entre VM.
+
+Les IP 10.108.2.29 et 10.108.2.65 portent le marqueur `dynamic`.
+Prévoir leur stabilité ou la mise à jour des variables si les baux changent.
+La passerelle par défaut des VM n'est pas fournie et n'est pas supposée.
 
 ### Conventions RD et RT
 
@@ -190,25 +223,32 @@ Aucun import croisé entre les deux filiales n'est prévu.
 
 | Point | État connu | Suite à prévoir |
 |---|---|---|
-| Docker | Client présent sur ce poste, moteur non joignable lors du contrôle initial | Vérifier le moteur sur l'hôte Linux du labo |
-| Containerlab | Pas trouvé dans le PATH Windows lors du contrôle initial | Vérifier sa présence et sa version sur l'hôte du labo |
-| Images cEOS | Disponibilité et version non vérifiées | Identifier l'image fournie et les fonctions prises en charge |
-| Hôte Linux / WSL | Cible à préciser, accès WSL refusé dans la session initiale | Identifier la machine réellement utilisée |
-| Ressources | CPU, mémoire disponible et disque non mesurés | Relever les ressources de la cible et la consommation d'un cEOS |
-| Conteneurs réseau | 13 prévus | Confirmer 9 cEOS et 4 hosts Linux |
+| VM d'outillage | toolsG2 : ens18 UP, 10.108.2.29/24 dynamique | Confirmer les outils et les ressources disponibles |
+| VM de laboratoire | labG2 : ens18 UP, 10.108.2.65/24 dynamique | Confirmer la joignabilité depuis toolsG2 |
+| Docker | Interfaces docker0 et bridge présentes sur les deux VM | Vérifier moteur, version et droits d'accès sur chaque VM |
+| Containerlab | Présence non démontrée par ip a | Vérifier sa présence et sa version sur labG2 |
+| Images cEOS | Disponibilité et version non vérifiées | Identifier les images fournies sur labG2 |
+| Ressources | CPU, mémoire disponible et disque non mesurés | Mesurer séparément toolsG2 et labG2 |
+| Conteneurs existants | Deux interfaces veth sont visibles sur le bridge de labG2 | Identifier les conteneurs existants avant toute réalisation |
+| Conteneurs réseau du PoC | 13 prévus sur labG2 | Confirmer 9 cEOS et 4 hosts Linux |
+| Management distant | Accès toolsG2 vers 172.31.255.0/24 non vérifié | Préparer routage, filtrage et chemin retour |
 
 Les services gnmic, Prometheus et Grafana peuvent ajouter trois conteneurs
-si chacun est conteneurisé. Ils ne font pas partie du total réseau de 13.
-Le dimensionnement doit tenir compte de ces services, de l'hôte Linux et
-de la consommation réelle de la version cEOS fournie.
+si chacun est conteneurisé sur toolsG2. Ils ne font pas partie du total réseau
+de 13 hébergé sur labG2. Le dimensionnement distingue les ressources des deux
+VM et tient compte des services et conteneurs déjà présents.
 
 Aucune installation, import d'image ou création de conteneur n'a été réalisé
-sur le laboratoire. Les contrôles initiaux ci-dessus portent sur le poste local.
+sur les VM dans le cadre de cette préparation. L'état des interfaces provient
+des sorties fournies, sans connexion distante effectuée par l'assistant.
+Les vérifications antérieures sur Windows ne caractérisent pas ces deux VM.
+Les contrôles en lecture seule restant à prévoir sont listés dans le
+document d'environnement.
 
 ## 5. Préparation NetOps
 
 - Dépôt Git : `Romain397/Reseau-NetOps`.
-- `inventory/hosts.yml` : brouillon regroupant les neuf routeurs EOS et quatre hosts.
+- `inventory/hosts.yml` : deux VM d'infrastructure, neuf routeurs EOS et quatre hosts.
 - `inventory/group_vars/eos.yml` : paramètres de connexion eAPI HTTPS/443.
 - `data/fabric.yml` : variables et adressage proposés, sans identifiants.
 - `templates/eos.cfg.j2` : squelette Jinja2, à compléter lors d'une phase ultérieure.
@@ -217,6 +257,9 @@ Les noms de l'inventaire reprennent en minuscules ceux du schéma.
 L'authentification, les certificats et les versions des outils restent à
 préciser. Les variables de conception ne sont pas encore reliées à un
 playbook de génération. Aucun template n'a été rendu ni envoyé à un routeur.
+Le compte `NetOps`, observé dans les invites des VM, est renseigné uniquement
+pour le groupe d'infrastructure. Le compte eAPI des routeurs reste à définir.
+L'inventaire contient 15 entrées, dont 13 équipements réseau du PoC.
 
 ## 6. Documentation
 
@@ -240,6 +283,8 @@ Tous les scénarios ci-dessous sont **non exécutés**.
 
 | Test | Précondition et action future | Résultat attendu |
 |---|---|---|
+| E01 Accès VM | Contrôler la joignabilité entre 10.108.2.29 et 10.108.2.65 | Accès inter-VM conforme aux règles du laboratoire |
+| E02 Accès de gestion | Depuis toolsG2, contrôler le chemin vers les IP de management et les services eAPI/gNMI des futurs cEOS | Accès individuels aux routeurs, chemin retour disponible |
 | T01 Inventaire | Comparer les équipements du labo avec le schéma | 13 nœuds réseau conformes |
 | T02 OSPF | Examiner les voisins et la joignabilité des loopbacks | Adjacences FULL, loopbacks opérateur joignables |
 | T03 LDP | Examiner voisins, associations et chemins de labels | Transport MPLS vers les PE distants |

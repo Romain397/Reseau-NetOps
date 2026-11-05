@@ -1,11 +1,44 @@
 ---
 # Brouillon des variables et du plan d'adressage (étapes 3 et 5).
-# Aucune de ces valeurs n'a été appliquée à un équipement.
+# Aucune valeur proposée n'a été appliquée par cette préparation.
 # Choix proposés, à adapter si le sujet ou le laboratoire impose d'autres valeurs.
+environment:
+  # Informations observées dans les sorties ip a fournies par l'utilisateur.
+  infrastructure_subnet: 10.108.2.0/24
+  access_user: NetOps
+  addressing: dhcp
+  vms:
+    toolsG2:
+      address: 10.108.2.29
+      interface: ens18
+      prefix_length: 24
+      # Affectation proposée, services et ressources non vérifiés.
+      planned_role: automation_and_monitoring
+      observed_bridge: br-4b600d8327cc
+      observed_bridge_state: DOWN
+    labG2:
+      address: 10.108.2.65
+      interface: ens18
+      prefix_length: 24
+      planned_role: containerlab_host
+      observed_bridge: br-c5b16cfe8a39
+      observed_bridge_state: UP
+  observed_docker_subnets:
+    - 172.17.0.0/16
+    - 172.18.0.0/16
+  management_access:
+    # Conception uniquement : aucune route ou règle de filtrage appliquée.
+    source_vm: toolsG2
+    destination_vm: labG2
+    planned_mode: routed_access_to_lab_management
+    proposed_next_hop: 10.108.2.65
+    status: to_validate
 lab_name: netops
 provider_as: 65000
 management_subnet: 172.31.255.0/24
 management_gateway: 172.31.255.1
+# Ce réseau de management est prévu uniquement sur labG2.
+# L'adresse .1 représente sa passerelle de bridge proposée, pas celle du LAN VM.
 # Images à identifier lors de l'étape 4, sans installation ni import à ce stade.
 ceos_image: null
 host_image: null
