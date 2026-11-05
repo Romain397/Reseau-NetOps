@@ -1,0 +1,19 @@
+{# Brouillon de structure pour l'étape 5. Aucun rendu ni déploiement réalisé. #}
+hostname {{ inventory_hostname }}
+!
+{# Les blocs de gestion, d'interfaces et de protocoles restent à préparer. #}
+{% if role == 'pe' %}
+{% for tenant in tenant_names %}
+vrf instance {{ tenant }}
+!
+{% endfor %}
+{% endif %}
+{# À compléter ultérieurement :
+   - gestion via eAPI HTTPS/443 et authentification ;
+   - interfaces et loopbacks à partir du plan d'adressage ;
+   - OSPF aire 0 et LDP sur les PE et P ;
+   - MP-BGP VPNv4 et rôle RR sur P1 ;
+   - eBGP PE-CE, RD et RT sur les PE ;
+   - annonce du LAN sur les CE.
+   Ce gabarit ne constitue pas une configuration EOS complète.
+#}

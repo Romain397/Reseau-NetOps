@@ -1,0 +1,9 @@
+---
+# Paramètres préparatoires de connexion. Aucun identifiant enregistré.
+ansible_connection: ansible.netcommon.httpapi
+ansible_network_os: arista.eos.eos
+ansible_httpapi_use_ssl: true
+ansible_httpapi_port: 443
+ansible_httpapi_validate_certs: true
+# L'authentification et la confiance dans les certificats seront préparées
+# à partir du laboratoire fourni, avant toute future connexion.

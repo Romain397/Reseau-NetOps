@@ -1,0 +1,15 @@
+.build/
+.venv/
+__pycache__/
+*.pyc
+.env
+rendered/
+reports/
+backups/
+clab-*/
+*.tar
+*.tar.gz
+*.qcow2
+*.pem
+id_*
+!*.pub
