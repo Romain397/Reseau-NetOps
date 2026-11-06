@@ -22,18 +22,25 @@ connexion VPN et authentification. Aucun identifiant n'est enregistré dans Git.
 |---|---|---|
 | RAM totale | 23 Gio | 11 Gio |
 | RAM disponible avant déploiement | 22 Gio | 11 Gio |
-| CPU | 8 cœurs, selon le relevé fourni | Non relevé |
-| Espace libre sur / | 67 Go | 66 Go |
-| Docker | 29.7.2, selon le relevé fourni | 29.7.2, selon le relevé fourni |
-| Containerlab | 0.79.0, confirmé en SSH | Non installé, selon le relevé fourni |
-| Ansible | ansible-core 2.21.3, selon le relevé fourni | Non installé, selon le relevé fourni |
-| Python | 3.12.3, selon le relevé fourni | 3.12.3, selon le relevé fourni |
+| CPU | 8 cœurs, confirmé | 4 cœurs, confirmé |
+| Espace libre sur / après déploiement | 66 Go | 66 Go |
+| Docker client et serveur | 29.7.2, confirmé | 29.7.2, confirmé |
+| Containerlab | 0.79.0 au déploiement, **0.82.0 actuellement** | Exécutable absent du PATH |
+| Ansible | ansible-core 2.21.3, confirmé dans pipx | Exécutable absent du PATH |
+| Python | 3.12.3, confirmé | 3.12.3, confirmé |
 | Git | Exécutable disponible | 2.43.0, confirmé en SSH |
 
-Dans l'interpréteur `python3` de LAB utilisé pendant cette intervention,
-les imports renvoient **PyYAML 6.0.1 et Jinja2 3.1.2**, alors que le relevé
-fourni mentionnait 6.0.3 et 3.1.6. Les scripts sont validés avec les bibliothèques
-présentes ; aucune mise à niveau n'a été imposée sur LAB.
+Dans le Python système de LAB, les imports renvoient **PyYAML 6.0.1 et
+Jinja2 3.1.2**. Dans l'environnement pipx d'Ansible, les versions sont bien
+**PyYAML 6.0.3 et Jinja2 3.1.6**, conformément au relevé fourni. Ansible est
+accessible à `/home/NetOps/.local/bin/ansible` ; une commande SSH non interactive
+peut ne pas inclure ce répertoire dans son PATH.
+
+Après déploiement, LAB conserve environ **11 Gio de RAM disponible**. Le relevé
+de 22 Gio correspondait à l'état avant le démarrage des 13 conteneurs.
+Une mise à jour vers **Containerlab 0.82.0** a été observée dans le terminal
+de VS Code pendant la configuration de l'extension. Le déploiement initial
+et sa première campagne de tests ont bien utilisé 0.79.0.
 
 ## Docker avant déploiement
 

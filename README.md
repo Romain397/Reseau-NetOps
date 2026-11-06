@@ -24,6 +24,7 @@ conteneurs reste une étape ultérieure.
 | [Procédure LAB](docs/deploiement.md) | Exécution | Commandes et résultats attendus |
 | [Journal du jour](docs/journal-2026-11-06.md) | Preuves | Résultats réellement recueillis |
 | [Environnement des deux VM](docs/environnement-vm.md) | Infrastructure | État fourni et contrôles SSH |
+| [Containerlab dans VS Code](docs/vscode-containerlab.md) | Administration | Connexion distante à LAB depuis Windows |
 | [Inventaire Ansible](inventory/hosts.yml) | Phase future | Deux VM et 13 équipements |
 | [Template Jinja2](templates/eos.cfg.j2) | Base | Interfaces, management et loopbacks |
 | [Feuille de route](docs/feuille-de-route.md) | Projet complet | Conception L3VPN et étapes futures |
