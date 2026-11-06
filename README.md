@@ -6,6 +6,10 @@ puis activer OSPF area 0 après réussite des tests de base.
 **État validé le 6 novembre 2026 : déployé sur LAB, 91/91 contrôles réussis.**
 Voir [le journal et les preuves](docs/journal-2026-11-06.md).
 
+La [documentation complète du projet](docs/documentation-projet.md) retrace
+le travail depuis le 5 novembre : conception, environnement, déploiement,
+configurations, tests, accès VS Code, Git et étapes restantes.
+
 L'architecture retenue comprend **13 équipements** : quatre hosts, quatre CE,
 trois PE et deux P. **PE-PAR est partagé par les deux filiales**.
 
@@ -18,6 +22,7 @@ conteneurs reste une étape ultérieure.
 
 | Élément | Étapes concernées | État |
 |---|---|---|
+| [Documentation complète](docs/documentation-projet.md) | Ensemble du projet | Historique et état des réalisations |
 | [Topologie Containerlab](topology.yml) | Déploiement | 13 nœuds et 15 liens |
 | [Variables et adressage](data/fabric.yml) | Conception | Source des artefacts générés |
 | [Câblage](docs/cablage.md) | Contrôle | Interfaces et IP des 15 liens |
@@ -58,5 +63,5 @@ Les sorties brutes sont dans `reports/`, ignoré par Git ; versionner un bilan
 sans secrets dans `docs/`. Les mots de passe et images cEOS restent hors du dépôt.
 
 Les IP des deux VM proviennent des sorties `ip a` de l'utilisateur et sont
-dynamiques. Les IP des 13 équipements restent proposées. L'inventaire
+dynamiques. Les IP des 13 équipements ont été appliquées au laboratoire. L'inventaire
 comprend donc 15 entrées : deux VM d'infrastructure et 13 équipements réseau.
