@@ -446,8 +446,11 @@ L'entrée active de Running Labs est donc celle à utiliser pour ce projet.
 
 Le [guide du groupe pour VS Code](vscode-containerlab.md) accompagne chaque
 membre depuis son propre PC : prérequis, VPN, SSH, connexion distante,
-menus Graph, Attach, Inspect et Save Configs, exercices et dépannage.
-La visualisation des nœuds actifs a été vérifiée ; les fonctions de capture
+ouverture du dessin par double-clic sur le laboratoire, menus Attach,
+Inspect et Save Configs, exercices et dépannage.
+L'affichage des nœuds actifs et du dessin TopoViewer avec les treize
+équipements et quinze liens a été vérifié. Le menu Graph de draw.io propose
+un assistant distinct de cette vue interactive ; les fonctions de capture
 Wireshark et de partage du laboratoire n'ont pas été validées dans cette phase.
 
 ## 10. Git et publication

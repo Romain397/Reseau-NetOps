@@ -298,8 +298,21 @@ si tout le groupe utilise NetOps.
 
 Les équipements doivent apparaître en état **running**. La couleur de
 l'indicateur peut dépendre du thème ; vérifier aussi l'état écrit.
-Pour consulter le schéma, utiliser le menu du laboratoire, par clic droit
-ou par les trois points, puis **Graph / TopoViewer** selon la version.
+Pour consulter le schéma dans la version de référence :
+
+1. **Double-cliquer sur le nom `netops (NetOps)`** dans Running Labs.
+2. Attendre l'ouverture de l'onglet **netops** au centre de VS Code.
+3. Vérifier que les treize équipements et leurs quinze liens sont dessinés.
+
+Ce raccourci a été testé sur le laboratoire. L'action de la vue interactive
+est nommée **Open TopoViewer** dans cette version.
+
+Le menu **Graph** contient aussi des fonctions de dessin **draw.io**.
+L'option **Interactive** de draw.io ouvre un assistant dans un terminal avec
+les textes **Assign Levels** et **Confirm Level**. Cet assistant attend une
+sélection ; il explique pourquoi aucun dessin ne s'affiche immédiatement.
+Pour ouvrir directement la vue TopoViewer, revenir à Running Labs et
+utiliser le double-clic décrit ci-dessus.
 
 Le laboratoire est déjà actif. Le fichier déployé est **topology.yml**.
 L'extension le retrouve à partir des conteneurs en fonctionnement.
