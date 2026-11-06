@@ -1,0 +1,21 @@
+! À appliquer après les tests de base.
+configure terminal
+interface Ethernet1
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+exit
+interface Ethernet2
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+exit
+interface Loopback0
+   ip ospf area 0.0.0.0
+exit
+router ospf 1
+   router-id 10.255.0.13
+   passive-interface default
+   no passive-interface Ethernet1
+   no passive-interface Ethernet2
+   max-lsa 12000
+end
+write memory

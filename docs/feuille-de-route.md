@@ -1,7 +1,10 @@
 # Feuille de route de la journée projet
 
-Ce document prépare le PoC. Les états « proposé », « à vérifier » et
-« non exécuté » ne constituent pas des validations du laboratoire.
+Ce document conserve la conception complète du PoC, y compris les phases
+L3VPN futures. L'exécution du 6 novembre 2026 et les vérifications réellement
+effectuées sont décrites dans [le journal du jour](journal-2026-11-06.md) et
+[la procédure LAB](deploiement.md). Les passages « à prévoir » ci-dessous
+décrivent la conception initiale et ne constituent pas des preuves d'exécution.
 
 Références de travail : sujet « Plan_Module_Réseaux_Modernes_NetOps »,
 diapositives 5 et 6, supports Introduction MPLS L3VPN et Introduction NetOps,
@@ -121,10 +124,11 @@ L'isolation des VRF ne chiffre pas les communications.
 
 | VM | Adresse observée sur ens18 | Rôle proposé |
 |---|---|---|
-| toolsG2 | 10.108.2.29/24 | Git, contrôleur Ansible, gnmic, Prometheus et Grafana |
-| labG2 | 10.108.2.65/24 | Docker, Containerlab, neuf cEOS et quatre hosts Linux |
+| toolsG2 | 10.108.2.29/24 | Git, documentation, Nautobot et futurs outils complémentaires |
+| labG2 | 10.108.2.65/24 | Docker, Containerlab, neuf cEOS, quatre hosts Linux et premier contrôleur Ansible |
 
-Ces rôles restent à confirmer par les contrôles d'environnement.
+Ces rôles sont retenus pour la phase du 6 novembre ; le transfert ultérieur
+du contrôleur Ansible vers TOOLS reste possible.
 Les VM appartiennent au même sous-réseau IPv4 d'infrastructure. Leurs IP ne
 remplacent ni les adresses LAN clientes ni les loopbacks ni les adresses de
 management des équipements du PoC.

@@ -1,0 +1,130 @@
+# Généré par scripts/prepare.py ; modifier data/fabric.yml.
+name: netops
+mgmt:
+  network: netops-mgmt
+  ipv4-subnet: 172.31.255.0/24
+topology:
+  kinds:
+    arista_ceos:
+      image: ceos:4.36.1F
+    linux:
+      image: ghcr.io/srl-labs/network-multitool:latest
+  nodes:
+    p1:
+      kind: arista_ceos
+      mgmt-ipv4: 172.31.255.11
+      startup-config: configs/base/p1.cfg
+    p2:
+      kind: arista_ceos
+      mgmt-ipv4: 172.31.255.12
+      startup-config: configs/base/p2.cfg
+    pe-par:
+      kind: arista_ceos
+      mgmt-ipv4: 172.31.255.13
+      startup-config: configs/base/pe-par.cfg
+    pe-avi:
+      kind: arista_ceos
+      mgmt-ipv4: 172.31.255.14
+      startup-config: configs/base/pe-avi.cfg
+    pe-bdx:
+      kind: arista_ceos
+      mgmt-ipv4: 172.31.255.15
+      startup-config: configs/base/pe-bdx.cfg
+    ce-a-par:
+      kind: arista_ceos
+      mgmt-ipv4: 172.31.255.17
+      startup-config: configs/base/ce-a-par.cfg
+    ce-a-avi:
+      kind: arista_ceos
+      mgmt-ipv4: 172.31.255.18
+      startup-config: configs/base/ce-a-avi.cfg
+    ce-b-par:
+      kind: arista_ceos
+      mgmt-ipv4: 172.31.255.19
+      startup-config: configs/base/ce-b-par.cfg
+    ce-b-bdx:
+      kind: arista_ceos
+      mgmt-ipv4: 172.31.255.20
+      startup-config: configs/base/ce-b-bdx.cfg
+    host-a-par:
+      kind: linux
+      mgmt-ipv4: 172.31.255.101
+      exec:
+      - ip link set dev eth1 up
+      - ip address replace 10.10.10.10/24 dev eth1
+      - ip route replace 10.10.20.0/24 via 10.10.10.1 dev eth1
+      - ip route replace 10.20.10.0/24 via 10.10.10.1 dev eth1
+      - ip route replace 10.20.20.0/24 via 10.10.10.1 dev eth1
+    host-a-avi:
+      kind: linux
+      mgmt-ipv4: 172.31.255.102
+      exec:
+      - ip link set dev eth1 up
+      - ip address replace 10.10.20.10/24 dev eth1
+      - ip route replace 10.10.10.0/24 via 10.10.20.1 dev eth1
+      - ip route replace 10.20.10.0/24 via 10.10.20.1 dev eth1
+      - ip route replace 10.20.20.0/24 via 10.10.20.1 dev eth1
+    host-b-par:
+      kind: linux
+      mgmt-ipv4: 172.31.255.103
+      exec:
+      - ip link set dev eth1 up
+      - ip address replace 10.20.10.10/24 dev eth1
+      - ip route replace 10.10.10.0/24 via 10.20.10.1 dev eth1
+      - ip route replace 10.10.20.0/24 via 10.20.10.1 dev eth1
+      - ip route replace 10.20.20.0/24 via 10.20.10.1 dev eth1
+    host-b-bdx:
+      kind: linux
+      mgmt-ipv4: 172.31.255.104
+      exec:
+      - ip link set dev eth1 up
+      - ip address replace 10.20.20.10/24 dev eth1
+      - ip route replace 10.10.10.0/24 via 10.20.20.1 dev eth1
+      - ip route replace 10.10.20.0/24 via 10.20.20.1 dev eth1
+      - ip route replace 10.20.10.0/24 via 10.20.20.1 dev eth1
+  links:
+  - endpoints:
+    - pe-par:eth3
+    - ce-a-par:eth1
+  - endpoints:
+    - ce-a-par:eth2
+    - host-a-par:eth1
+  - endpoints:
+    - pe-avi:eth3
+    - ce-a-avi:eth1
+  - endpoints:
+    - ce-a-avi:eth2
+    - host-a-avi:eth1
+  - endpoints:
+    - pe-par:eth4
+    - ce-b-par:eth1
+  - endpoints:
+    - ce-b-par:eth2
+    - host-b-par:eth1
+  - endpoints:
+    - pe-bdx:eth3
+    - ce-b-bdx:eth1
+  - endpoints:
+    - ce-b-bdx:eth2
+    - host-b-bdx:eth1
+  - endpoints:
+    - pe-par:eth1
+    - p1:eth1
+  - endpoints:
+    - pe-par:eth2
+    - p2:eth1
+  - endpoints:
+    - pe-avi:eth1
+    - p1:eth2
+  - endpoints:
+    - pe-avi:eth2
+    - p2:eth2
+  - endpoints:
+    - pe-bdx:eth1
+    - p1:eth3
+  - endpoints:
+    - pe-bdx:eth2
+    - p2:eth3
+  - endpoints:
+    - p1:eth4
+    - p2:eth4

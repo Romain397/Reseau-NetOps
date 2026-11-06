@@ -1,7 +1,5 @@
 ---
-# Brouillon des variables et du plan d'adressage (étapes 3 et 5).
-# Aucune valeur proposée n'a été appliquée par cette préparation.
-# Choix proposés, à adapter si le sujet ou le laboratoire impose d'autres valeurs.
+# Source des fichiers du laboratoire. Adressage à vérifier sur LAB avant déploiement.
 environment:
   # Informations observées dans les sorties ip a fournies par l'utilisateur.
   infrastructure_subnet: 10.108.2.0/24
@@ -12,15 +10,14 @@ environment:
       address: 10.108.2.29
       interface: ens18
       prefix_length: 24
-      # Affectation proposée, services et ressources non vérifiés.
-      planned_role: automation_and_monitoring
+      planned_role: git_documentation_and_tools
       observed_bridge: br-4b600d8327cc
       observed_bridge_state: DOWN
     labG2:
       address: 10.108.2.65
       interface: ens18
       prefix_length: 24
-      planned_role: containerlab_host
+      planned_role: containerlab_and_initial_ansible_controller
       observed_bridge: br-c5b16cfe8a39
       observed_bridge_state: UP
   observed_docker_subnets:
@@ -39,9 +36,9 @@ management_subnet: 172.31.255.0/24
 management_gateway: 172.31.255.1
 # Ce réseau de management est prévu uniquement sur labG2.
 # L'adresse .1 représente sa passerelle de bridge proposée, pas celle du LAN VM.
-# Images à identifier lors de l'étape 4, sans installation ni import à ce stade.
-ceos_image: null
-host_image: null
+# Images déclarées disponibles par l'utilisateur ; aucun téléchargement automatique prévu.
+ceos_image: ceos:4.36.1F
+host_image: ghcr.io/srl-labs/network-multitool:latest
 tenants:
   TENANT_1:
     subsidiary: A

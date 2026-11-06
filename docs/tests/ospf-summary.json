@@ -1,0 +1,373 @@
+{
+  "timestamp_utc": "20261106T131539Z",
+  "phase": "ospf",
+  "passed": 91,
+  "total": 91,
+  "failures": [],
+  "results": [
+    {
+      "test": "p1 running",
+      "ok": true
+    },
+    {
+      "test": "p2 running",
+      "ok": true
+    },
+    {
+      "test": "pe-par running",
+      "ok": true
+    },
+    {
+      "test": "pe-avi running",
+      "ok": true
+    },
+    {
+      "test": "pe-bdx running",
+      "ok": true
+    },
+    {
+      "test": "ce-a-par running",
+      "ok": true
+    },
+    {
+      "test": "ce-a-avi running",
+      "ok": true
+    },
+    {
+      "test": "ce-b-par running",
+      "ok": true
+    },
+    {
+      "test": "ce-b-bdx running",
+      "ok": true
+    },
+    {
+      "test": "host-a-par running",
+      "ok": true
+    },
+    {
+      "test": "host-a-avi running",
+      "ok": true
+    },
+    {
+      "test": "host-b-par running",
+      "ok": true
+    },
+    {
+      "test": "host-b-bdx running",
+      "ok": true
+    },
+    {
+      "test": "p1 interfaces/loopback",
+      "ok": true
+    },
+    {
+      "test": "p1 management",
+      "ok": true
+    },
+    {
+      "test": "p2 interfaces/loopback",
+      "ok": true
+    },
+    {
+      "test": "p2 management",
+      "ok": true
+    },
+    {
+      "test": "pe-par interfaces/loopback",
+      "ok": true
+    },
+    {
+      "test": "pe-par management",
+      "ok": true
+    },
+    {
+      "test": "pe-avi interfaces/loopback",
+      "ok": true
+    },
+    {
+      "test": "pe-avi management",
+      "ok": true
+    },
+    {
+      "test": "pe-bdx interfaces/loopback",
+      "ok": true
+    },
+    {
+      "test": "pe-bdx management",
+      "ok": true
+    },
+    {
+      "test": "ce-a-par interfaces/loopback",
+      "ok": true
+    },
+    {
+      "test": "ce-a-par management",
+      "ok": true
+    },
+    {
+      "test": "ce-a-avi interfaces/loopback",
+      "ok": true
+    },
+    {
+      "test": "ce-a-avi management",
+      "ok": true
+    },
+    {
+      "test": "ce-b-par interfaces/loopback",
+      "ok": true
+    },
+    {
+      "test": "ce-b-par management",
+      "ok": true
+    },
+    {
+      "test": "ce-b-bdx interfaces/loopback",
+      "ok": true
+    },
+    {
+      "test": "ce-b-bdx management",
+      "ok": true
+    },
+    {
+      "test": "pe-par:Ethernet3 -> ce-a-par:Ethernet1",
+      "ok": true
+    },
+    {
+      "test": "ce-a-par:Ethernet1 -> pe-par:Ethernet3",
+      "ok": true
+    },
+    {
+      "test": "ce-a-par:Ethernet2 -> host-a-par:eth1",
+      "ok": true
+    },
+    {
+      "test": "host-a-par:eth1 -> ce-a-par:Ethernet2",
+      "ok": true
+    },
+    {
+      "test": "pe-avi:Ethernet3 -> ce-a-avi:Ethernet1",
+      "ok": true
+    },
+    {
+      "test": "ce-a-avi:Ethernet1 -> pe-avi:Ethernet3",
+      "ok": true
+    },
+    {
+      "test": "ce-a-avi:Ethernet2 -> host-a-avi:eth1",
+      "ok": true
+    },
+    {
+      "test": "host-a-avi:eth1 -> ce-a-avi:Ethernet2",
+      "ok": true
+    },
+    {
+      "test": "pe-par:Ethernet4 -> ce-b-par:Ethernet1",
+      "ok": true
+    },
+    {
+      "test": "ce-b-par:Ethernet1 -> pe-par:Ethernet4",
+      "ok": true
+    },
+    {
+      "test": "ce-b-par:Ethernet2 -> host-b-par:eth1",
+      "ok": true
+    },
+    {
+      "test": "host-b-par:eth1 -> ce-b-par:Ethernet2",
+      "ok": true
+    },
+    {
+      "test": "pe-bdx:Ethernet3 -> ce-b-bdx:Ethernet1",
+      "ok": true
+    },
+    {
+      "test": "ce-b-bdx:Ethernet1 -> pe-bdx:Ethernet3",
+      "ok": true
+    },
+    {
+      "test": "ce-b-bdx:Ethernet2 -> host-b-bdx:eth1",
+      "ok": true
+    },
+    {
+      "test": "host-b-bdx:eth1 -> ce-b-bdx:Ethernet2",
+      "ok": true
+    },
+    {
+      "test": "pe-par:Ethernet1 -> p1:Ethernet1",
+      "ok": true
+    },
+    {
+      "test": "p1:Ethernet1 -> pe-par:Ethernet1",
+      "ok": true
+    },
+    {
+      "test": "pe-par:Ethernet2 -> p2:Ethernet1",
+      "ok": true
+    },
+    {
+      "test": "p2:Ethernet1 -> pe-par:Ethernet2",
+      "ok": true
+    },
+    {
+      "test": "pe-avi:Ethernet1 -> p1:Ethernet2",
+      "ok": true
+    },
+    {
+      "test": "p1:Ethernet2 -> pe-avi:Ethernet1",
+      "ok": true
+    },
+    {
+      "test": "pe-avi:Ethernet2 -> p2:Ethernet2",
+      "ok": true
+    },
+    {
+      "test": "p2:Ethernet2 -> pe-avi:Ethernet2",
+      "ok": true
+    },
+    {
+      "test": "pe-bdx:Ethernet1 -> p1:Ethernet3",
+      "ok": true
+    },
+    {
+      "test": "p1:Ethernet3 -> pe-bdx:Ethernet1",
+      "ok": true
+    },
+    {
+      "test": "pe-bdx:Ethernet2 -> p2:Ethernet3",
+      "ok": true
+    },
+    {
+      "test": "p2:Ethernet3 -> pe-bdx:Ethernet2",
+      "ok": true
+    },
+    {
+      "test": "p1:Ethernet4 -> p2:Ethernet4",
+      "ok": true
+    },
+    {
+      "test": "p2:Ethernet4 -> p1:Ethernet4",
+      "ok": true
+    },
+    {
+      "test": "p1 OSPF voisins FULL",
+      "ok": true
+    },
+    {
+      "test": "p1 routes OSPF",
+      "ok": true
+    },
+    {
+      "test": "p1 Loopback0 -> p2",
+      "ok": true
+    },
+    {
+      "test": "p1 Loopback0 -> pe-par",
+      "ok": true
+    },
+    {
+      "test": "p1 Loopback0 -> pe-avi",
+      "ok": true
+    },
+    {
+      "test": "p1 Loopback0 -> pe-bdx",
+      "ok": true
+    },
+    {
+      "test": "p2 OSPF voisins FULL",
+      "ok": true
+    },
+    {
+      "test": "p2 routes OSPF",
+      "ok": true
+    },
+    {
+      "test": "p2 Loopback0 -> p1",
+      "ok": true
+    },
+    {
+      "test": "p2 Loopback0 -> pe-par",
+      "ok": true
+    },
+    {
+      "test": "p2 Loopback0 -> pe-avi",
+      "ok": true
+    },
+    {
+      "test": "p2 Loopback0 -> pe-bdx",
+      "ok": true
+    },
+    {
+      "test": "pe-par OSPF voisins FULL",
+      "ok": true
+    },
+    {
+      "test": "pe-par routes OSPF",
+      "ok": true
+    },
+    {
+      "test": "pe-par Loopback0 -> p1",
+      "ok": true
+    },
+    {
+      "test": "pe-par Loopback0 -> p2",
+      "ok": true
+    },
+    {
+      "test": "pe-par Loopback0 -> pe-avi",
+      "ok": true
+    },
+    {
+      "test": "pe-par Loopback0 -> pe-bdx",
+      "ok": true
+    },
+    {
+      "test": "pe-avi OSPF voisins FULL",
+      "ok": true
+    },
+    {
+      "test": "pe-avi routes OSPF",
+      "ok": true
+    },
+    {
+      "test": "pe-avi Loopback0 -> p1",
+      "ok": true
+    },
+    {
+      "test": "pe-avi Loopback0 -> p2",
+      "ok": true
+    },
+    {
+      "test": "pe-avi Loopback0 -> pe-par",
+      "ok": true
+    },
+    {
+      "test": "pe-avi Loopback0 -> pe-bdx",
+      "ok": true
+    },
+    {
+      "test": "pe-bdx OSPF voisins FULL",
+      "ok": true
+    },
+    {
+      "test": "pe-bdx routes OSPF",
+      "ok": true
+    },
+    {
+      "test": "pe-bdx Loopback0 -> p1",
+      "ok": true
+    },
+    {
+      "test": "pe-bdx Loopback0 -> p2",
+      "ok": true
+    },
+    {
+      "test": "pe-bdx Loopback0 -> pe-par",
+      "ok": true
+    },
+    {
+      "test": "pe-bdx Loopback0 -> pe-avi",
+      "ok": true
+    }
+  ]
+}

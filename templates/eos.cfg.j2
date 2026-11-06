@@ -1,19 +1,26 @@
-{# Brouillon de structure pour l'étape 5. Aucun rendu ni déploiement réalisé. #}
-hostname {{ inventory_hostname }}
+! Généré par scripts/prepare.py depuis data/fabric.yml (phase de base).
+hostname {{ name }}
 !
-{# Les blocs de gestion, d'interfaces et de protocoles restent à préparer. #}
-{% if role == 'pe' %}
-{% for tenant in tenant_names %}
-vrf instance {{ tenant }}
+vrf instance MGMT
+!
+interface Management0
+   vrf MGMT
+   ip address {{ management }}/{{ management_prefix }}
+   no shutdown
+!
+ip route vrf MGMT 0.0.0.0/0 {{ management_gateway }}
+!
+ip routing
+!
+interface Loopback0
+   ip address {{ loopback }}/32
+!
+{% for interface in interfaces %}
+interface {{ interface.name }}
+   description {{ interface.peer }}
+   no switchport
+   ip address {{ interface.address }}
+   no shutdown
 !
 {% endfor %}
-{% endif %}
-{# À compléter ultérieurement :
-   - gestion via eAPI HTTPS/443 et authentification ;
-   - interfaces et loopbacks à partir du plan d'adressage ;
-   - OSPF aire 0 et LDP sur les PE et P ;
-   - MP-BGP VPNv4 et rôle RR sur P1 ;
-   - eBGP PE-CE, RD et RT sur les PE ;
-   - annonce du LAN sur les CE.
-   Ce gabarit ne constitue pas une configuration EOS complète.
-#}
+end

@@ -1,150 +1,72 @@
-# Préparation de l'environnement des deux VM
+# Environnement technique — relevé du 6 novembre 2026
 
-Ce document complète les étapes 3 à 6. Il décrit les informations fournies
-et les vérifications à prévoir. Aucune connexion distante, installation,
-modification réseau ou création de conteneur n'a été effectuée par l'assistant.
+Les informations ci-dessous associent l'état communiqué par l'utilisateur et
+les contrôles SSH effectués pendant cette journée. Les résultats réseau sont
+dans [le journal du jour](journal-2026-11-06.md).
 
-## Informations observées
+## Rôles retenus
 
-Source : sorties `ip a` transmises par l'utilisateur.
-
-| Élément | toolsG2 | labG2 |
+| VM | Adresse ens18 | Rôle de cette phase |
 |---|---|---|
-| Compte indiqué dans l'invite | NetOps | NetOps |
-| Interface principale | ens18, UP | ens18, UP |
-| Adresse IPv4 | 10.108.2.29/24, dynamic | 10.108.2.65/24, dynamic |
-| Sous-réseau d'infrastructure | 10.108.2.0/24 | 10.108.2.0/24 |
-| MTU d'ens18 | 1500 | 1500 |
-| docker0 | 172.17.0.1/16, sans carrier | 172.17.0.1/16, sans carrier |
-| Autre bridge | br-4b600d8327cc, 172.18.0.1/16, DOWN | br-c5b16cfe8a39, 172.18.0.1/16, UP |
-| Interfaces veth montrées | Aucune dans la sortie fournie | Deux sur le bridge 172.18.0.1/16 |
+| labG2 / LAB | 10.108.2.65/24 | Docker, Containerlab, 9 cEOS, 4 hosts, configuration et tests ; premier contrôleur Ansible |
+| toolsG2 / TOOLS | 10.108.2.29/24 | Copie Git du projet, documentation, environnement Nautobot existant, futurs outils complémentaires |
 
-La présence d'interfaces Docker ne démontre pas que le moteur est actuellement
-joignable, que Containerlab est installé ou qu'une image cEOS est disponible.
-Un bridge sans carrier ne suffit pas à conclure à une panne Docker.
-Le nombre de conteneurs existants doit être obtenu auprès de Docker, sans
-le déduire du seul nombre d'interfaces veth.
+Les adresses sont attribuées par DHCP. Une réservation reste souhaitable.
+Le compte NetOps possède les droits Docker et sudo sans mot de passe.
+Les connexions SSH depuis le poste d'administration ont fonctionné après
+connexion VPN et authentification. Aucun identifiant n'est enregistré dans Git.
 
-Les deux VM appartiennent au même sous-réseau IPv4. Leur joignabilité mutuelle,
-leurs accès SSH et les autorisations du compte restent à vérifier.
-La passerelle par défaut et le DNS ne figurent pas dans ces sorties.
+## Ressources et logiciels
 
-## Répartition proposée
-
-| VM | Rôle prévu | Ressources à vérifier |
+| Élément | LAB | TOOLS |
 |---|---|---|
-| toolsG2, 10.108.2.29 | Dépôt de travail, Ansible/Jinja2, gnmic, Prometheus et Grafana | CPU, mémoire, disque, outils déjà installés et ports disponibles |
-| labG2, 10.108.2.65 | Docker/Containerlab, P1/P2, trois PE, quatre CE, quatre hosts | Capacité pour 9 cEOS et 4 hosts, images présentes, charge existante |
+| RAM totale | 23 Gio | 11 Gio |
+| RAM disponible avant déploiement | 22 Gio | 11 Gio |
+| CPU | 8 cœurs, selon le relevé fourni | Non relevé |
+| Espace libre sur / | 67 Go | 66 Go |
+| Docker | 29.7.2, selon le relevé fourni | 29.7.2, selon le relevé fourni |
+| Containerlab | 0.79.0, confirmé en SSH | Non installé, selon le relevé fourni |
+| Ansible | ansible-core 2.21.3, selon le relevé fourni | Non installé, selon le relevé fourni |
+| Python | 3.12.3, selon le relevé fourni | 3.12.3, selon le relevé fourni |
+| Git | Exécutable disponible | 2.43.0, confirmé en SSH |
 
-Les 13 conteneurs du PoC sont prévus sur labG2. Si les trois services
-d'observabilité sont chacun conteneurisés sur toolsG2, le projet représente
-16 conteneurs répartis sur les deux VM, hors conteneurs préexistants.
-Les deux VM ne sont pas incluses dans ce total de conteneurs.
+Dans l'interpréteur `python3` de LAB utilisé pendant cette intervention,
+les imports renvoient **PyYAML 6.0.1 et Jinja2 3.1.2**, alors que le relevé
+fourni mentionnait 6.0.3 et 3.1.6. Les scripts sont validés avec les bibliothèques
+présentes ; aucune mise à niveau n'a été imposée sur LAB.
 
-## Adressage et accès de management
+## Docker avant déploiement
 
-| Usage | Réseau | Statut |
-|---|---|---|
-| Accès aux VM | 10.108.2.0/24 | Observé |
-| Réseaux Docker existants | 172.17.0.0/16 et 172.18.0.0/16 | Observés sur les deux VM |
-| Management des équipements sur labG2 | 172.31.255.0/24, passerelle de bridge 172.31.255.1 | Proposition |
-| LAN des filiales | 10.10.10.0/24, 10.10.20.0/24, 10.20.10.0/24, 10.20.20.0/24 | Proposition |
-| Loopbacks | Adresses /32 dans 10.255.0.0/24 | Proposition |
-| Liens CE-PE | Quatre /30 dans 172.16.0.0/28 | Proposition |
-| Liens PE-P et P-P | Sept /30 dans 10.0.0.0/27 | Proposition |
+Sur LAB, images confirmées : `ceos:4.36.1F`, network-multitool:latest,
+ghostwire:latest, packetflix:latest et wireshark-vnc-docker:latest
+(les quatre dernières sous les namespaces communiqués). Le PoC utilise
+les deux premières sans téléchargement. Le tag latest du host est mutable :
+conserver son ID/digest avec les preuves avant un futur changement d'image.
 
-Le plan proposé ne chevauche pas les sous-réseaux observés. Vérifier aussi
-les autres routes, les VPN éventuels et les réseaux Docker non montrés.
-Les bridges 172.18.0.0/16 des deux VM sont locaux à chaque hôte.
-Ne pas utiliser leur adresse identique comme preuve d'une liaison entre VM.
+EdgeShark et Ghostwire sont actifs depuis trois jours au moment du contrôle.
+Ils sont conservés. Leurs réseaux Docker sont `172.17.0.0/16` et
+`172.18.0.0/16`, sans chevauchement avec `172.31.255.0/24` proposé pour le PoC.
 
-Chemin de gestion à préparer : toolsG2, puis labG2 en 10.108.2.65,
-puis chaque équipement en 172.31.255.x. Pour un accès routé, il faudra
-vérifier une route adaptée depuis toolsG2, le transfert IP sur labG2,
-les autorisations de filtrage et le chemin retour. La configuration par
-défaut d'un bridge Docker ne garantit pas l'accès depuis une autre VM.
-Une route seule ne prouve donc pas que l'accès fonctionnera.
+Sur TOOLS, le contexte Docker `default` contient cinq conteneurs Nautobot,
+PostgreSQL, Redis, Celery Worker et Celery Beat. **Tous sont arrêtés** au
+moment du contrôle SSH. Les mentions antérieures « conteneurs présents »
+ne signifiaient donc pas « services en fonctionnement ». Ils n'ont été
+ni démarrés, ni supprimés, ni reconfigurés pendant ce travail.
 
-Cette conception est à valider selon le laboratoire fourni. Aucune route,
-règle de pare-feu, publication de port ou modification Docker n'est appliquée.
-Le contrôle de la connectivité précédera tout provisionnement futur.
+## Accès et séparation des réseaux
 
-Les IP individuelles des neuf cEOS doivent rester dans l'inventaire eAPI.
-L'adresse 10.108.2.65 désigne la VM et ne permet pas d'identifier à elle seule
-chacun de ses routeurs. Les LAN clients ne doivent pas être annoncés sur le
-réseau d'infrastructure pour rendre le management accessible.
+L'utilisateur a validé la connectivité LAB vers TOOLS et TOOLS vers LAB.
+La route par défaut de LAB passe par `10.108.2.254` sur ens18.
+Le management des 13 conteneurs utilise un bridge local à LAB :
+`netops-mgmt`, `172.31.255.0/24`, passerelle `172.31.255.1`.
 
-## Flux à documenter avant la réalisation
+Les routeurs placent Management0 dans une VRF MGMT dédiée. Les interfaces
+de données et les loopbacks restent hors de cette VRF. Cela évite de valider
+par erreur le backbone avec un détour par le réseau de management.
+Aucun compte EOS distant ni eAPI/gNMI n'est provisionné dans cette phase.
+L'administration se fait avec `docker exec` depuis LAB.
 
-| Origine | Destination | Usage futur | Port prévu |
-|---|---|---|---|
-| Poste d'administration | toolsG2 / labG2 | Administration des VM | SSH, généralement TCP/22, à confirmer |
-| toolsG2 | Chaque cEOS de labG2 | Ansible via eAPI | HTTPS TCP/443 |
-| gnmic sur toolsG2 | Chaque cEOS de labG2 | Collecte gNMI | TCP/6030 prévu, à confirmer sur l'image |
-| Prometheus sur toolsG2 | gnmic | Lecture des métriques | À définir dans la future configuration |
-| Grafana sur toolsG2 | Prometheus | Requêtes de métriques | À définir dans la future configuration |
-
-L'authentification et la validation des certificats eAPI restent à préparer.
-Le compte Linux `NetOps` ne définit pas le compte de connexion aux cEOS.
-Si gnmic s'exécute dans un conteneur, son propre chemin réseau et le retour
-doivent être vérifiés en plus de ceux de la VM toolsG2.
-
-## Vérifications en lecture seule à prévoir
-
-Ces commandes sont des points de contrôle documentés. Elles n'ont pas été
-exécutées sur les VM par l'assistant. Les échecs éventuels peuvent dépendre
-des droits du compte et doivent être relevés sans modifier ces droits ici.
-
-Sur chacune des deux VM :
-
-```sh
-hostname
-ip -br address
-ip route
-nproc
-free -h
-df -h
-docker version
-docker info
-docker ps -a
-docker network ls
-ss -lnt
-```
-
-Depuis toolsG2, pour examiner le chemin vers labG2 :
-
-```sh
-ip route get 10.108.2.65
-ping -c 3 10.108.2.65
-command -v ansible-playbook
-command -v git
-command -v gnmic
-```
-
-Depuis labG2, pour examiner le chemin vers toolsG2 et les outils du labo :
-
-```sh
-ip route get 10.108.2.29
-ping -c 3 10.108.2.29
-command -v containerlab
-docker image ls
-```
-
-Un refus ICMP ne suffit pas à conclure que SSH ou les autres services sont
-inaccessibles. Après identification de l'exécutable Containerlab, relever sa
-version. Après identification des réseaux Docker, inspecter leurs sous-réseaux
-et leurs membres. Aucun conteneur existant ne doit être supprimé ou relancé
-pour réaliser ces contrôles.
-
-## Points encore ouverts
-
-- Confirmer les rôles proposés des deux VM et leurs capacités.
-- Vérifier le moteur Docker, Containerlab et les images cEOS sur labG2.
-- Identifier les conteneurs déjà présents sur les deux VM.
-- Préciser l'accès de toolsG2 aux futurs équipements de labG2.
-- Prévoir une réservation DHCP ou une autre méthode validée pour stabiliser
-  les IP des VM, ou mettre à jour les variables après changement de bail.
-- Confirmer le routage, le filtrage, l'authentification et les certificats.
-
-Références techniques : [réseaux bridge Docker](https://docs.docker.com/engine/network/drivers/bridge/)
-et [filtrage réseau Docker](https://docs.docker.com/engine/network/packet-filtering-firewalls/).
+L'accès routé depuis TOOLS aux conteneurs nécessite encore un travail sur
+les routes, le filtrage Docker, l'authentification et les certificats.
+Ansible reste donc sur LAB pour commencer. Les adresses et paramètres eAPI
+de l'inventaire constituent une préparation pour la phase d'automatisation.
