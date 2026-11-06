@@ -1,8 +1,6 @@
 # PoC MPLS L3VPN — documentation du projet depuis son démarrage
 
-**Période documentée : 5 et 6 novembre 2026.**
-
-**État de référence : dernière campagne réseau du 6 novembre à 14:30:27 CET.**
+**État de référence : dernière campagne réseau validée.**
 
 **Dépôt : [Romain397/Reseau-NetOps](https://github.com/Romain397/Reseau-NetOps).**
 
@@ -10,7 +8,6 @@ Ce document rassemble l'analyse du besoin, la conception, la préparation des
 fichiers, les contrôles des VM, le déploiement, les configurations, les tests,
 l'accès depuis VS Code et le versionnement Git. Il s'appuie sur l'historique
 du dépôt, les configurations exportées et les bilans de tests conservés.
-Les dates et heures présentées sont celles de Paris, sauf mention UTC.
 
 Le résultat acquis est une **base réseau IP et OSPF fonctionnelle :
 13 conteneurs, 15 liens et 91 contrôles réussis**. Le service MPLS L3VPN
@@ -41,27 +38,26 @@ organiser le projet, déployer les équipements, adresser les interfaces,
 configurer les loopbacks et rendre le backbone joignable par OSPF avant de
 mettre en place les fonctions clientes et MPLS.
 
-## 2. Chronologie du travail
+## 2. Suivi du projet
 
-| Date / heure de référence | Travail réalisé | Trace |
+| Étape | Travail réalisé | Trace |
 |---|---|---|
-| 5 novembre, 09:46 | Initialisation du dépôt et licence MIT | `a80f612` |
-| 5 novembre, 10:17 | Analyse et préparation : feuille de route, inventaire, adressage, squelette Jinja2, configuration Ansible, règles Git | `b36a908` |
-| 5 novembre, 10:32 | Adaptation de la préparation aux VM toolsG2 et labG2 et à leurs adresses réelles | `2730803` |
-| 6 novembre, avant déploiement | Contrôles SSH des ressources de LAB, de Docker, des images, des réseaux et des droits ; inspection de TOOLS | Relevés d'environnement et journal du jour |
-| 6 novembre, 14:09:07 à 14:13:19 | Déploiement des 13 conteneurs et création des 15 liens avec Containerlab 0.79.0 | Journal de déploiement sur LAB |
-| 6 novembre, campagne démarrée à 14:14:45 | Validation de la base : 61/61 contrôles réussis | `base-summary.json` |
-| 6 novembre, après validation de la base | Activation OSPF sur les cinq P/PE et sauvegarde des configurations | Fragments CLI et snapshots EOS |
-| 6 novembre, campagne démarrée à 14:15:39 | Validation OSPF : 91/91 contrôles réussis | `ospf-summary.json` |
-| 6 novembre, 14:18 | Versionnement du déploiement, des scripts et des preuves | `98be706` |
-| 6 novembre, phase VS Code | Installation de Remote SSH, création d'une connexion par clé à LAB, installation distante de Containerlab et vérification des 13 nœuds dans l'interface | `docs/vscode-containerlab.md` |
-| 6 novembre, phase VS Code | Mise à jour Containerlab 0.79.0 → 0.82.0 observée dans le terminal VS Code | Version relevée sur LAB |
-| 6 novembre, campagne démarrée à 14:30:27 | Nouvelle validation après configuration de VS Code et mise à jour : 91/91 contrôles réussis | `ospf-after-vscode-summary.json` |
-| 6 novembre, 14:31 | Documentation de l'accès distant et vérification détaillée des versions dans pipx | `ef9e680` |
-| 6 novembre, à partir du commit de 14:35 | Ajout du guide pratique, push GitHub jusqu'à `4b33035`, puis mise à jour des copies LAB et TOOLS | Branche `main` synchronisée à la clôture de cette étape |
+| 1 | Initialisation du dépôt et licence MIT | `a80f612` |
+| 2 | Analyse et préparation : feuille de route, inventaire, adressage, squelette Jinja2, configuration Ansible, règles Git | `b36a908` |
+| 3 | Adaptation de la préparation aux VM toolsG2 et labG2 et à leurs adresses réelles | `2730803` |
+| 4 | Contrôles SSH des ressources de LAB, de Docker, des images, des réseaux et des droits ; inspection de TOOLS | Relevés d'environnement et journal de déploiement |
+| 5 | Déploiement des 13 conteneurs et création des 15 liens avec Containerlab 0.79.0 | Journal de déploiement sur LAB |
+| 6 | Validation de la base : 61/61 contrôles réussis | `base-summary.json` |
+| 7 | Activation OSPF sur les cinq P/PE et sauvegarde des configurations | Fragments CLI et snapshots EOS |
+| 8 | Validation OSPF : 91/91 contrôles réussis | `ospf-summary.json` |
+| 9 | Versionnement du déploiement, des scripts et des preuves | `98be706` |
+| 10 | Installation de Remote SSH, création d'une connexion par clé à LAB, installation distante de Containerlab et vérification des 13 nœuds dans l'interface | `docs/vscode-containerlab.md` |
+| 11 | Mise à jour Containerlab 0.79.0 → 0.82.0 observée dans le terminal VS Code | Version relevée sur LAB |
+| 12 | Nouvelle validation après configuration de VS Code et mise à jour : 91/91 contrôles réussis | `ospf-after-vscode-summary.json` |
+| 13 | Documentation de l'accès distant et vérification détaillée des versions dans pipx | `ef9e680` |
+| 14 | Ajout du guide pratique, push GitHub jusqu'à `4b33035`, puis mise à jour des copies LAB et TOOLS | Branche `main` synchronisée à la clôture de cette étape |
 
-Les heures des commits correspondent à leur création ; celles des campagnes
-JSON correspondent au début des tests. Le temps de déploiement mesuré,
+Le temps de déploiement mesuré,
 environ **4 minutes 12 secondes**, concerne le laboratoire complet. Il ne
 valide pas encore le critère de durée d'un service L3VPN par intranet.
 
@@ -129,7 +125,7 @@ Les cinq images suivantes ont été confirmées sur LAB :
 
 Les images du PoC ont été utilisées sans téléchargement sur LAB. Leurs
 identifiants précis et le digest du host sont consignés dans le
-[journal du 6 novembre](journal-2026-11-06.md). Le tag `latest` du host étant
+[journal de déploiement](journal-2026-11-06.md). Le tag `latest` du host étant
 mutable, ces identifiants permettent de retrouver l'image effectivement utilisée.
 
 EdgeShark et Ghostwire sont restés en fonctionnement sur LAB. Le PoC ajoute
@@ -272,7 +268,6 @@ Reseau-NetOps/
 │   ├── environnement-vm.md
 │   ├── cablage.md
 │   ├── deploiement.md
-│   ├── journal-2026-11-06.md
 │   ├── vscode-containerlab.md
 │   └── tests/           # 3 bilans JSON versionnés
 └── reports/             # Journaux bruts locaux, ignorés par Git
@@ -315,8 +310,7 @@ La commande de déploiement exécutée par le script a été :
 sudo -n containerlab deploy -t topology.yml --max-workers 2
 ```
 
-Le laboratoire a été déployé avec Containerlab **0.79.0**, entre
-14:09:07 et 14:13:19 CET le 6 novembre. Le nombre de tâches simultanées
+Le laboratoire a été déployé avec Containerlab **0.79.0**. Le nombre de tâches simultanées
 a été limité à deux. Le déploiement a créé les neuf cEOS, les quatre hosts,
 le bridge de management et les quinze connexions de données.
 
@@ -390,22 +384,23 @@ valident pas un accès routé ou eAPI depuis TOOLS.
 
 ### 8.2 Résultats versionnés
 
-| Campagne | Début en heure de Paris | Résultat | Preuve |
-|---|---|---|---|
-| Base | 6 novembre, 14:14:45 | 61/61, aucun échec | [base-summary.json](tests/base-summary.json) |
-| OSPF après configuration | 6 novembre, 14:15:39 | 91/91, aucun échec | [ospf-summary.json](tests/ospf-summary.json) |
-| OSPF après configuration VS Code et mise à jour Containerlab | 6 novembre, 14:30:27 | 91/91, aucun échec | [ospf-after-vscode-summary.json](tests/ospf-after-vscode-summary.json) |
+| Campagne | Résultat | Preuve |
+|---|---|---|
+| Base | 61/61, aucun échec | [base-summary.json](tests/base-summary.json) |
+| OSPF après configuration | 91/91, aucun échec | [ospf-summary.json](tests/ospf-summary.json) |
+| OSPF après configuration VS Code et mise à jour Containerlab | 91/91, aucun échec | [ospf-after-vscode-summary.json](tests/ospf-after-vscode-summary.json) |
 
-Sur LAB, les journaux détaillés sont conservés sous :
+Sur LAB, les journaux détaillés sont conservés dans
+`/home/NetOps/Reseau-NetOps/reports/`, avec l'organisation suivante :
 
 ```text
-/home/NetOps/Reseau-NetOps/reports/deploy-20261106T130907Z.log
-/home/NetOps/Reseau-NetOps/reports/20261106T131445Z/
-/home/NetOps/Reseau-NetOps/reports/20261106T131539Z/
-/home/NetOps/Reseau-NetOps/reports/20261106T133027Z/
+reports/
+├── deploy-*.log       # Journaux de déploiement
+└── */                # Répertoires des campagnes de tests
+    ├── commands.log
+    └── summary.json
 ```
 
-Les noms de répertoires et les champs `timestamp_utc` des JSON sont en UTC.
 Les fichiers `commands.log` contiennent les commandes et leurs sorties ;
 les `summary.json` contiennent les résultats structurés. Les journaux bruts
 restent hors Git, tandis que les trois bilans et les configurations sans
@@ -467,7 +462,7 @@ Les mots de passe, la clé privée SSH, les images cEOS et les documents de
 cours n'ont pas été ajoutés au dépôt. Les règles d'exclusion et les fichiers
 destinés au push ont été contrôlés avant publication.
 
-Le 6 novembre, la branche distante `main` a été mise à jour de `2730803`
+La branche distante `main` a été mise à jour de `2730803`
 à **`4b33035`**, par un push normal, sans réécriture de l'historique.
 Les copies de LAB et TOOLS ont ensuite été actualisées par
 `git pull --ff-only`. Les trois copies étaient propres et synchronisées
@@ -483,9 +478,9 @@ avec `origin/main` à la clôture de cette publication.
 | `4b33035` | Guide pratique Containerlab et sauvegardes |
 
 Cette documentation complète est une étape documentaire supplémentaire.
-Les anciens commits conservent l'état de la préparation à leur date : les
+Les anciens commits conservent l'état de la préparation à chaque étape : les
 formulations « proposé » ou « non exécuté » de la feuille de route initiale
-ne doivent pas être utilisées pour décrire l'état validé au 6 novembre.
+ne doivent pas être utilisées pour décrire l'état validé du laboratoire.
 
 ## 11. Reprendre le laboratoire
 
@@ -603,7 +598,7 @@ et d'un seul PE d'accès. L'isolation finale des clients reste à démontrer.
 | [Environnement des VM](environnement-vm.md) | Ressources et versions vérifiées |
 | [Câblage généré](cablage.md) | Référence opérationnelle des quinze liens |
 | [Procédure de déploiement](deploiement.md) | Exécution, attentes et diagnostic |
-| [Journal du 6 novembre](journal-2026-11-06.md) | Horodatages, images et preuves de la première réalisation |
+| [Journal de déploiement](journal-2026-11-06.md) | Images et preuves de la première réalisation |
 | [Guide VS Code et Containerlab](vscode-containerlab.md) | Connexion depuis Windows, CLI et sauvegardes |
 | [Source d'adressage](../data/fabric.yml) | Variables utilisées pour générer le laboratoire |
 | [Topologie déployée](../topology.yml) | Déclaration des treize conteneurs et quinze liens |
