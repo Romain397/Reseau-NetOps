@@ -444,8 +444,9 @@ le laboratoire en cours. Les suffixes `.clab.yml` et `.clab.yaml` servent
 à la découverte des fichiers non déployés et aux boutons de l'éditeur.
 L'entrée active de Running Labs est donc celle à utiliser pour ce projet.
 
-La [procédure VS Code](vscode-containerlab.md) décrit les menus Graph,
-Attach, Inspect et Save Configs, ainsi qu'un premier exercice.
+Le [guide du groupe pour VS Code](vscode-containerlab.md) accompagne chaque
+membre depuis son propre PC : prérequis, VPN, SSH, connexion distante,
+menus Graph, Attach, Inspect et Save Configs, exercices et dépannage.
 La visualisation des nœuds actifs a été vérifiée ; les fonctions de capture
 Wireshark et de partage du laboratoire n'ont pas été validées dans cette phase.
 
@@ -599,7 +600,7 @@ et d'un seul PE d'accès. L'isolation finale des clients reste à démontrer.
 | [Câblage généré](cablage.md) | Référence opérationnelle des quinze liens |
 | [Procédure de déploiement](deploiement.md) | Exécution, attentes et diagnostic |
 | [Journal de déploiement](journal-2026-11-06.md) | Images et preuves de la première réalisation |
-| [Guide VS Code et Containerlab](vscode-containerlab.md) | Connexion depuis Windows, CLI et sauvegardes |
+| [Guide du groupe : VS Code et Containerlab](vscode-containerlab.md) | Connexion depuis chaque PC, premiers tests, collaboration et dépannage |
 | [Source d'adressage](../data/fabric.yml) | Variables utilisées pour générer le laboratoire |
 | [Topologie déployée](../topology.yml) | Déclaration des treize conteneurs et quinze liens |
 | [Configurations actives exportées](../configs/snapshots/) | État EOS relevé après activation OSPF |

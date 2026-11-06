@@ -6,6 +6,9 @@ puis activer OSPF area 0 après réussite des tests de base.
 **État validé le 6 novembre 2026 : déployé sur LAB, 91/91 contrôles réussis.**
 Voir [le journal et les preuves](docs/journal-2026-11-06.md).
 
+**Pour rejoindre le laboratoire depuis un nouveau PC :** suivre le
+[guide guidé du groupe pour Containerlab et VS Code](docs/vscode-containerlab.md).
+
 La [documentation complète du projet](docs/documentation-projet.md) retrace
 le travail depuis le 5 novembre : conception, environnement, déploiement,
 configurations, tests, accès VS Code, Git et étapes restantes.
@@ -29,7 +32,7 @@ conteneurs reste une étape ultérieure.
 | [Procédure LAB](docs/deploiement.md) | Exécution | Commandes et résultats attendus |
 | [Journal du jour](docs/journal-2026-11-06.md) | Preuves | Résultats réellement recueillis |
 | [Environnement des deux VM](docs/environnement-vm.md) | Infrastructure | État fourni et contrôles SSH |
-| [Containerlab dans VS Code](docs/vscode-containerlab.md) | Administration | Connexion distante à LAB depuis Windows |
+| [Guide du groupe : Containerlab et VS Code](docs/vscode-containerlab.md) | Accès et utilisation | Installation du client, VPN, SSH, premiers tests et dépannage |
 | [Inventaire Ansible](inventory/hosts.yml) | Phase future | Deux VM et 13 équipements |
 | [Template Jinja2](templates/eos.cfg.j2) | Base | Interfaces, management et loopbacks |
 | [Feuille de route](docs/feuille-de-route.md) | Projet complet | Conception L3VPN et étapes futures |
